@@ -1,0 +1,20 @@
+# file: deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:  # optional, but it's a good practice
+    app: echoserver
+  name: engeto-echoserver
+  namespace: engeto  # optional, by default to the current namespace
+spec:
+  selector:
+    matchLabels:
+      app: echoserver
+  template:
+    metadata:
+      labels:
+        app: echoserver
+    spec:
+      containers:
+      - name: main
+        image: cermakm/echoserver:latest
