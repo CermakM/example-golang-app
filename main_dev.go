@@ -1,4 +1,4 @@
-// +build prod
+// +build dev
 
 package main
 
@@ -47,7 +47,7 @@ func main() {
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Status: Production\n\n"))
+	w.Write([]byte("Status: Development\n\n"))
 	w.Write([]byte("Engeto: Kubernetes Example Application\n\n"))
 
 	fmt.Fprintf(w, "Request received: %#v", r)
