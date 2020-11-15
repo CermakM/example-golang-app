@@ -1,8 +1,10 @@
 FROM golang:1.14 as builder
 
+ARG BUILD_TAGS=prod
+
 COPY . .
 
-RUN go build -o /go/bin/server.go main.go
+RUN go build -o /go/bin/server.go --tags ${BUILD_TAGS}
 
 # ---
 
