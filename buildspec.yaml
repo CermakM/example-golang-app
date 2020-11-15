@@ -20,3 +20,8 @@ phases:
       - echo Pushing the Docker image...
       - docker push $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
       - docker push $IMAGE_REPO_NAME:latest
+
+artifacts:
+  files:
+      - docker-compose.yaml
+
