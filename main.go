@@ -3,8 +3,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 )
 
@@ -46,9 +49,31 @@ func main() {
 
 func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Status: Production\n\n"))
-	w.Write([]byte("Engeto: Kubernetes Example Application\n\n"))
 
-	fmt.Fprintf(w, "Request received: %#v", r)
+	data, err := json.MarshalIndent(
+		struct {
+			Host   string        `json:"host"`
+			Method string        `json:"method"`
+			Header http.Header   `json:"header"`
+			Body   io.ReadCloser `json:"body"`
+			Query  url.Values    `json:"query,omitempty"`
+		}{
+			Host:   r.Host,
+			Method: r.Method,
+			Header: r.Header,
+			Body:   r.Body,
+			Query:  r.URL.Query(),
+		},
+		"", "\t",
+	)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("<h1>Status: Production</h1>\n\n"))
+	w.Write([]byte("<h3>Engeto: Kubernetes Example Application</h3>\n\n"))
+
+	fmt.Fprintf(w, "Request received: %s\n", data)
 }
